@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      SYNC_TEST_DB_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      JWT_SECRET: test-jwt-secret-key-at-least-thirty-two-chars-for-local-and-ci
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Full CPython + pip (serverless-python-requirements runs `python3.11 -m pip`).
+      # uv-managed Python from setup-uv alone often has no pip module.
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Install backend Python dependencies
+        run: uv sync --frozen --all-groups
+        working-directory: backend
+
+      - name: Backend tests (Postgres; schema reset + migrations via pytest)
+        run: uv run pytest
+        working-directory: backend
+
+      - name: Ruff
+        run: uv run ruff check src tests conftest.py
+        working-directory: backend
+
+      - name: Export Lambda requirements
+        run: uv export --frozen --no-dev --no-emit-project --no-hashes -o requirements-lambda.txt
+        working-directory: backend
+
+      - name: Install backend npm dependencies
+        run: npm ci
+        working-directory: backend
+
+      - name: Validate Serverless config
+        run: npx serverless@3 print >/dev/null
+        working-directory: backend
+
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Build frontend
+        env:
+          VITE_API_BASE_URL: http://127.0.0.1:8000
+        run: npm run build
+        working-directory: frontend

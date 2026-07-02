@@ -1,0 +1,334 @@
+service: interview-assistant
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    fileName: requirements-lambda.txt
+    # Always build in the Lambda Python 3.11 image so native wheels (e.g. cryptography
+    # from authlib) target Amazon Linux 2 / glibc 2.26. non-linux skips Docker on CI
+    # Linux runners and can bundle manylinux_2_28 wheels that fail at import time.
+    dockerizePip: true
+    dockerImage: public.ecr.aws/sam/build-python3.11
+    slim: true
+    strip: false
+    noDeploy:
+      - boto3
+      - botocore
+
+  # Custom hostname + ACM are optional. Set BOTH env vars for a custom domain; otherwise CloudFront
+  # uses the default *.cloudfront.net certificate (no Aliases). The ACM cert must be in us-east-1
+  # and include this hostname in SAN, or creation fails with an invalid CNAME error.
+  frontendDomainName: ${env:FRONTEND_DOMAIN_NAME, ''}
+  frontendAcmCertArn: ${env:FRONTEND_ACM_CERT_ARN, ''}
+
+  # API custom domain (e.g. api.example.com). Set BOTH env vars; otherwise the default execute-api
+  # URL is used. The ACM cert must be in the same region as the API (provider.region), not us-east-1.
+  apiDomainName: ${env:API_DOMAIN_NAME, ''}
+  apiAcmCertArn: ${env:API_ACM_CERT_ARN, ''}
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: ${opt:region, 'eu-central-1'}
+  stage: ${opt:stage, 'prod'}
+  memorySize: 512
+  timeout: 30
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL, ''}
+    JWT_SECRET: ${env:JWT_SECRET, ''}
+    AUTH_PASSWORD_ENABLED: ${env:AUTH_PASSWORD_ENABLED, 'true'}
+    AUTH_GOOGLE_ENABLED: ${env:AUTH_GOOGLE_ENABLED, 'false'}
+    AUTH_FACEBOOK_ENABLED: ${env:AUTH_FACEBOOK_ENABLED, 'false'}
+    AUTH_GOOGLE_CLIENT_ID: ${env:AUTH_GOOGLE_CLIENT_ID, ''}
+    AUTH_GOOGLE_CLIENT_SECRET: ${env:AUTH_GOOGLE_CLIENT_SECRET, ''}
+    AUTH_FACEBOOK_APP_ID: ${env:AUTH_FACEBOOK_APP_ID, ''}
+    AUTH_FACEBOOK_APP_SECRET: ${env:AUTH_FACEBOOK_APP_SECRET, ''}
+    AUTH_FRONTEND_URL: ${env:AUTH_FRONTEND_URL, ''}
+    NOTIFICATIONS_TRANSPORT: ${env:NOTIFICATIONS_TRANSPORT, 'ses'}
+    NOTIFICATIONS_FROM_EMAIL: ${env:NOTIFICATIONS_FROM_EMAIL, ''}
+    SCHEDULER_TRANSPORT: ${env:SCHEDULER_TRANSPORT, 'sqs'}
+    SCHEDULER_QUEUE_MESSAGES_URL: !Ref MessagesQueue
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+          Resource: !GetAtt MessagesQueue.Arn
+        - Effect: Allow
+          Action:
+            - sqs:ReceiveMessage
+            - sqs:DeleteMessage
+            - sqs:GetQueueAttributes
+          Resource: !GetAtt MessagesQueue.Arn
+
+functions:
+  api:
+    handler: src.handler.handler
+    package:
+      patterns:
+        - "!alembic/**"
+        - "!alembic.ini"
+        - "!src/**/tests/**"
+        - "!src/migrate_handler.py"
+        - "!src/scheduler_handler.py"
+        - "!src/cron_handler.py"
+    events:
+      - httpApi:
+          path: /
+          method: ANY
+      - httpApi:
+          path: /{proxy+}
+          method: ANY
+
+  migrate:
+    handler: src/migrate_handler.handler
+    timeout: 120
+    memorySize: 512
+    description: Alembic upgrade head (invoke after deploy)
+
+  scheduler:
+    handler: src.scheduler_handler.handler
+    timeout: 120
+    memorySize: 512
+    description: Process scheduled tasks from SQS
+    events:
+      - sqs:
+          arn: !GetAtt MessagesQueue.Arn
+          batchSize: 1
+    package:
+      patterns:
+        - "!alembic/**"
+        - "!alembic.ini"
+        - "!src/**/tests/**"
+        - "!src/handler.py"
+        - "!src/migrate_handler.py"
+        - "!src/cron_handler.py"
+
+  cron:
+    handler: src.cron_handler.handler
+    timeout: 120
+    memorySize: 512
+    description: Enqueue due scheduled tasks (hourly tick)
+    events:
+      - schedule: rate(1 hour)
+    package:
+      patterns:
+        - "!alembic/**"
+        - "!alembic.ini"
+        - "!src/**/tests/**"
+        - "!src/handler.py"
+        - "!src/migrate_handler.py"
+        - "!src/scheduler_handler.py"
+
+package:
+  individually: true
+  patterns:
+    - "!venv/**"
+    - "!.venv/**"
+    - "!tests/**"
+    - "!src/**/tests/**"
+    - "!**/__pycache__/**"
+    - "!*.pyc"
+    - "!pyproject.toml"
+    - "!uv.lock"
+    - "!requirements-lambda.txt"
+    - "!.ruff_cache/**"
+
+resources:
+  Conditions:
+    HasFrontendCustomDomain:
+      Fn::And:
+        - Fn::Not:
+            - Fn::Equals:
+                - "${self:custom.frontendDomainName}"
+                - ""
+        - Fn::Not:
+            - Fn::Equals:
+                - "${self:custom.frontendAcmCertArn}"
+                - ""
+    HasApiCustomDomain:
+      Fn::And:
+        - Fn::Not:
+            - Fn::Equals:
+                - "${self:custom.apiDomainName}"
+                - ""
+        - Fn::Not:
+            - Fn::Equals:
+                - "${self:custom.apiAcmCertArn}"
+                - ""
+
+  Resources:
+    FrontendBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: !Sub "${self:service}-${self:provider.stage}-frontend-${AWS::AccountId}"
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          IgnorePublicAcls: false
+          BlockPublicPolicy: false
+          RestrictPublicBuckets: false
+
+    FrontendBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref FrontendBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal: "*"
+              Action: s3:GetObject
+              Resource: !Sub "${FrontendBucket.Arn}/*"
+
+    FrontendCloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Enabled: true
+          Comment: !Sub "${self:service}-${self:provider.stage} frontend"
+          Aliases:
+            Fn::If:
+              - HasFrontendCustomDomain
+              - - "${self:custom.frontendDomainName}"
+              - Ref: AWS::NoValue
+          Origins:
+            - Id: FrontendS3WebsiteOrigin
+              DomainName: !Sub "${FrontendBucket}.s3-website.${AWS::Region}.amazonaws.com"
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: http-only
+          DefaultCacheBehavior:
+            TargetOriginId: FrontendS3WebsiteOrigin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            CachedMethods:
+              - GET
+              - HEAD
+            Compress: true
+            ForwardedValues:
+              QueryString: false
+              Cookies:
+                Forward: none
+          DefaultRootObject: index.html
+          CustomErrorResponses:
+            - ErrorCode: 403
+              ResponseCode: 200
+              ResponsePagePath: /index.html
+            - ErrorCode: 404
+              ResponseCode: 200
+              ResponsePagePath: /index.html
+          PriceClass: PriceClass_100
+          ViewerCertificate:
+            Fn::If:
+              - HasFrontendCustomDomain
+              - AcmCertificateArn: "${self:custom.frontendAcmCertArn}"
+                SslSupportMethod: sni-only
+                MinimumProtocolVersion: TLSv1.2_2021
+              - CloudFrontDefaultCertificate: true
+
+    ApiCustomDomain:
+      Type: AWS::ApiGatewayV2::DomainName
+      Condition: HasApiCustomDomain
+      Properties:
+        DomainName: "${self:custom.apiDomainName}"
+        DomainNameConfigurations:
+          - CertificateArn: "${self:custom.apiAcmCertArn}"
+            EndpointType: REGIONAL
+
+    ApiCustomDomainMapping:
+      Type: AWS::ApiGatewayV2::ApiMapping
+      Condition: HasApiCustomDomain
+      Properties:
+        DomainName: !Ref ApiCustomDomain
+        ApiId: !Ref HttpApi
+        Stage: $default
+
+    MessagesDeadLetterQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: !Sub "${self:service}-${self:provider.stage}-messages-dlq"
+
+    MessagesQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: !Sub "${self:service}-${self:provider.stage}-messages"
+        VisibilityTimeout: 360
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt MessagesDeadLetterQueue.Arn
+          maxReceiveCount: 3
+
+  Outputs:
+    FrontendBucketName:
+      Value: !Ref FrontendBucket
+    FrontendWebsiteURL:
+      Value: !GetAtt FrontendBucket.WebsiteURL
+    FrontendCloudFrontDomainName:
+      Value: !GetAtt FrontendCloudFrontDistribution.DomainName
+    FrontendCloudFrontDistributionId:
+      Value: !Ref FrontendCloudFrontDistribution
+    FrontendCustomDomainName:
+      Value:
+        Fn::If:
+          - HasFrontendCustomDomain
+          - "${self:custom.frontendDomainName}"
+          - ""
+    ApiCustomDomainName:
+      Value:
+        Fn::If:
+          - HasApiCustomDomain
+          - "${self:custom.apiDomainName}"
+          - ""
+    ApiCustomDomainTarget:
+      Description: CNAME target for the API custom domain (regional API Gateway hostname)
+      Value:
+        Fn::If:
+          - HasApiCustomDomain
+          - !GetAtt ApiCustomDomain.RegionalDomainName
+          - ""
+    ApiCustomDomainUrl:
+      Description: Public HTTPS URL for the API when a custom domain is configured
+      Value:
+        Fn::If:
+          - HasApiCustomDomain
+          - !Sub "https://${self:custom.apiDomainName}"
+          - ""
+
+    MigrateLambdaName:
+      Description: Physical name of the migration Lambda (invoke after deploy)
+      Value:
+        Ref: MigrateLambdaFunction
+
+    MessagesQueueUrl:
+      Description: SQS queue URL for MESSAGES scheduled tasks
+      Value: !Ref MessagesQueue
