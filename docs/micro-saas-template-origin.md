@@ -5,9 +5,9 @@ This project was bootstrapped from [micro-saas-template](https://github.com/wlat
 | Field | Value |
 |-------|-------|
 | Template repository | `git@github.com:wlatanowicz/micro-saas-template.git` |
-| Commit (bootstrap) | `13b3576fe50843266ec89519a720a97d94109118` |
+| Commit (bootstrap) | `9faf3b8328a4310e8fd6b270562f7cdda455acf9` |
 | Commit date | 2026-07-05 |
-| Commit message | Add script for provisioning ACM certificates with Cloudflare DNS validation |
+| Commit message | Update Cloudflare DNS scripts to support proxied CNAME records |
 | Applied to this repo | 2026-07-05 |
 
 ## Applying future template updates
@@ -15,8 +15,8 @@ This project was bootstrapped from [micro-saas-template](https://github.com/wlat
 1. In a clone of `micro-saas-template`, inspect changes since the bootstrap commit:
 
    ```bash
-   git log 13b3576fe50843266ec89519a720a97d94109118..HEAD --oneline
-   git diff 13b3576fe50843266ec89519a720a97d94109118..HEAD
+   git log 9faf3b8328a4310e8fd6b270562f7cdda455acf9..HEAD --oneline
+   git diff 9faf3b8328a4310e8fd6b270562f7cdda455acf9..HEAD
    ```
 
 2. Cherry-pick or manually port relevant changes into this repo. Skip product-specific files (e.g. `docs/discovery_summary.md`, i18n product strings, `serverless.yml` `service:` name).
