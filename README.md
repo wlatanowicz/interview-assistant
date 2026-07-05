@@ -18,8 +18,8 @@ The demo `items` API and UI are **placeholder scaffolding** from the template. T
 
 - `backend/` — Serverless stack (`service: interview-assistant`), FastAPI app, Alembic migrations
 - `frontend/` — React SPA (`VITE_API_BASE_URL` injected at build time)
-- `scripts/` — Deploy frontend to S3 + invalidate CloudFront; invoke migration Lambda; optional Cloudflare CNAME updates (frontend + API); **`collect-gha-env.sh`** builds **`.env.gha`** for GitHub Actions from AWS + prompts; **`push-gha-env.sh`** uploads **`.env.gha`** to repo Actions secrets/variables via **`gh`**
-- `docs/` — Product discovery notes, [GitHub Actions AWS OIDC setup](docs/github-actions-aws-oidc.md), and [micro-saas-template origin](docs/micro-saas-template-origin.md) (tracked commit for future template updates)
+- `scripts/` — Deploy frontend to S3 + invalidate CloudFront; invoke migration Lambda; optional Cloudflare CNAME updates (frontend + API); **`provision-acm-certs.sh`** requests ACM certs with Cloudflare DNS validation; **`collect-gha-env.sh`** builds **`.env.gha`** for GitHub Actions from AWS + prompts; **`push-gha-env.sh`** uploads **`.env.gha`** to repo Actions secrets/variables via **`gh`**
+- `docs/` — Product discovery notes, [GitHub Actions AWS OIDC setup](docs/github-actions-aws-oidc.md), [micro-saas-template origin](docs/micro-saas-template-origin.md) (tracked commit for future template updates), and [downstream template tracking](docs/downstream-template-tracking.md)
 
 ## Prerequisites
 
@@ -192,6 +192,12 @@ With credentials available (e.g. **`AWS_PROFILE`**), run:
 
 ```bash
 AWS_PROFILE=your-profile ./scripts/collect-gha-env.sh
+```
+
+Provision ACM certificates (frontend in us-east-1, API in deploy region) with Cloudflare DNS validation:
+
+```bash
+AWS_PROFILE=your-profile ./scripts/provision-acm-certs.sh
 ```
 
 The script prints **`sts get-caller-identity`**, lists **RDS** instances in the configured region (endpoint, identifier) and **ISSUED ACM** certs in **us-east-1** (CloudFront) and the **deploy region** (API Gateway), and prompts for **database name**, **password**, **OIDC role ARN**, optional **frontend** / **API** domains / **Cloudflare** values. When you build **`DATABASE_URL`** from an RDS instance, it uses the instance endpoint and your password. It writes **`.env.gha`** at the repo root (gitignored) with **`shlex`-safe** quoting. If **`.env.gha` already exists**, its values are loaded first and used as defaults (press **Enter** to keep each field, **`k`** to keep **DATABASE_URL** / ACM). Use **`./scripts/collect-gha-env.sh -n`** to print the file to stdout only.
