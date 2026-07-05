@@ -19,7 +19,7 @@ The demo `items` API and UI are **placeholder scaffolding** from the template. T
 - `backend/` — Serverless stack (`service: interview-assistant`), FastAPI app, Alembic migrations
 - `frontend/` — React SPA (`VITE_API_BASE_URL` injected at build time)
 - `scripts/` — Deploy frontend to S3 + invalidate CloudFront; invoke migration Lambda; optional Cloudflare CNAME updates (frontend + API); **`collect-gha-env.sh`** builds **`.env.gha`** for GitHub Actions from AWS + prompts; **`push-gha-env.sh`** uploads **`.env.gha`** to repo Actions secrets/variables via **`gh`**
-- `docs/` — Product discovery notes and [GitHub Actions AWS OIDC setup](docs/github-actions-aws-oidc.md)
+- `docs/` — Product discovery notes, [GitHub Actions AWS OIDC setup](docs/github-actions-aws-oidc.md), and [micro-saas-template origin](docs/micro-saas-template-origin.md) (tracked commit for future template updates)
 
 ## Prerequisites
 
