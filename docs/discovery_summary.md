@@ -28,6 +28,9 @@ Become the operating system for job seekers.
 -   Reminder system
 -   Company & recruiter contacts
 
+Technical domain design: [Core domain model](domain-model.md) (`JobApplication`,
+`ApplicationEvent`, `Contact`).
+
 ## Killer Features
 
 -   Email parsing
