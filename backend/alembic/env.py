@@ -4,7 +4,7 @@ import alembic_postgresql_enum  # noqa: F401 — register enum autogenerate/comp
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
-from src.apps.demo.models import Item  # noqa: F401 — register metadata
+from src.apps.applications.models import JobApplication  # noqa: F401 — register metadata
 from src.apps.users.models import (  # noqa: F401 — register metadata
     User,
     UserIdentity,

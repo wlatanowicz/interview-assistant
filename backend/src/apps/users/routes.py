@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-import jwt
 from fastapi import APIRouter, Depends, Request, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, field_validator
 from sqlmodel import Session, select
 
@@ -13,11 +11,11 @@ from src.apps.users.api_errors import ApiErrorCode
 from src.apps.users.auth import (
     MIN_PASSWORD_LENGTH,
     create_access_token,
-    decode_token,
     ensure_auth_configured,
     normalize_email,
     verify_password,
 )
+from src.apps.users.deps import get_current_user
 from src.apps.users.guards import ensure_provider_configured, require_method_enabled
 from src.apps.users.models import User, UserStatus
 from src.apps.users.oauth import (
@@ -37,7 +35,6 @@ from src.utils.api_errors import raise_api_error
 from src.utils.deps import get_db_session
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
-bearer = HTTPBearer(auto_error=False)
 
 SEND_CODE_MESSAGE = "If an account is eligible, a verification code has been sent."
 
@@ -283,52 +280,7 @@ def signin(
 
 
 @router.get("/me", response_model=UserPublic)
-def me(
-    creds: HTTPAuthorizationCredentials | None = Depends(bearer),
-    session: Session | None = Depends(get_db_session),
-) -> UserPublic:
-    if session is None:
-        raise_api_error(
-            ApiErrorCode.database_not_configured,
-            "database not configured",
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-        )
-    ensure_auth_configured()
-    if creds is None or creds.scheme.lower() != "bearer":
-        raise_api_error(
-            ApiErrorCode.not_authenticated,
-            "Not authenticated",
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-    try:
-        payload = decode_token(creds.credentials)
-    except jwt.PyJWTError:
-        raise_api_error(
-            ApiErrorCode.invalid_or_expired_token,
-            "Invalid or expired token",
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-    try:
-        user_id = UUID(str(payload["sub"]))
-    except (KeyError, TypeError, ValueError):
-        raise_api_error(
-            ApiErrorCode.invalid_token,
-            "Invalid token",
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-    user = session.get(User, user_id)
-    if user is None:
-        raise_api_error(
-            ApiErrorCode.user_not_found,
-            "User not found",
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-    if user.status != UserStatus.active:
-        raise_api_error(
-            ApiErrorCode.account_not_active,
-            "Account is not active",
-            status_code=status.HTTP_403_FORBIDDEN,
-        )
+def me(user: User = Depends(get_current_user)) -> UserPublic:
     return UserPublic(
         id=user.id,
         email=user.email,

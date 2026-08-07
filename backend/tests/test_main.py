@@ -11,7 +11,7 @@ def test_health(client: TestClient) -> None:
     assert body["database_configured"] is False
 
 
-def test_list_items_without_database(client: TestClient) -> None:
-    r = client.get("/api/items")
-    assert r.status_code == 200
-    assert r.json()["items"] == []
+def test_list_applications_without_database(client: TestClient) -> None:
+    r = client.get("/api/applications")
+    assert r.status_code == 503
+    assert r.json()["detail"]["code"] == "database_not_configured"

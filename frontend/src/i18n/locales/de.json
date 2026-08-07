@@ -5,21 +5,37 @@
     "notSignedIn": "Nicht angemeldet",
     "signOut": "Abmelden"
   },
-  "api": {
-    "title": "API",
-    "status": "Status:",
-    "databaseConfigured": "Datenbank konfiguriert:"
+  "dashboard": {
+    "title": "Aktive Bewerbungen",
+    "empty": "Noch keine aktiven Bewerbungen. Erfassen Sie Ihre erste Stelle."
   },
-  "items": {
-    "title": "Elemente",
-    "empty": "Noch keine Elemente."
+  "applications": {
+    "new": "Neue Bewerbung",
+    "newTitle": "Neue Bewerbung starten",
+    "company": "Unternehmen",
+    "position": "Position",
+    "state": "Status",
+    "startedOn": "Begonnen am",
+    "adLink": "Stellenanzeigen-URL",
+    "create": "Erstellen",
+    "cancel": "Abbrechen",
+    "states": {
+      "interested": "Interessiert",
+      "applied": "Beworben",
+      "screening": "Screening",
+      "interviewing": "Interviews",
+      "assessment": "Assessment",
+      "offer": "Angebot",
+      "accepted": "Angenommen",
+      "rejected": "Abgelehnt",
+      "withdrawn": "Zurückgezogen",
+      "ghosted": "Keine Antwort"
+    }
   },
   "errors": {
     "configuration": "Konfigurationsfehler",
     "requestFailed": "Anfrage fehlgeschlagen",
     "apiBaseNotSet": "VITE_API_BASE_URL ist nicht gesetzt. Für lokale Entwicklung oder Deployment konfigurieren.",
-    "healthCheckFailed": "Gesundheitsprüfung fehlgeschlagen: {{status}}",
-    "itemsRequestFailed": "Elementanfrage fehlgeschlagen: {{status}}",
     "api": {
       "database_not_configured": "Die Datenbank ist nicht konfiguriert.",
       "auth_not_configured": "Authentifizierung ist nicht konfiguriert.",
@@ -42,6 +58,7 @@
       "oauth_authorization_failed": "Anmeldung mit dem Anbieter fehlgeschlagen. Bitte erneut versuchen.",
       "oauth_profile_missing": "Anmeldung fehlgeschlagen. Profilinformationen fehlen.",
       "oauth_email_not_available": "Anmeldung fehlgeschlagen. E-Mail vom Anbieter nicht verfügbar.",
+      "invalid_application_state": "Dieser Status kann beim Anlegen einer Bewerbung nicht verwendet werden.",
       "request_validation_error": "Bitte Eingaben prüfen und erneut versuchen."
     }
   },

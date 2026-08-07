@@ -1,17 +1,8 @@
-import {
-  Alert,
-  Badge,
-  Button,
-  Container,
-  Group,
-  List,
-  Paper,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Alert, Badge, Button, Container, Group, Text, Title } from "@mantine/core";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Dashboard } from "./applications/Dashboard";
 import { AuthPanel } from "./auth/AuthPanel";
 import { apiBase, fetchAuthConfig, loadMe, parseOAuthHash } from "./auth/api";
 import type { AuthConfig, MeUser } from "./auth/types";
@@ -21,22 +12,14 @@ import { translateApiError } from "./i18n/translateApiError";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const ACCESS_TOKEN_KEY = "access_token";
 
-type Health = { status: string; database_configured: boolean };
-
-type ItemsResponse = {
-  items: { id: number; name: string }[];
-  detail?: string;
-  detail_code?: string;
-};
-
 export function App() {
   const { t } = useTranslation();
-  const [health, setHealth] = useState<Health | null>(null);
-  const [items, setItems] = useState<ItemsResponse | null>(null);
   const [configError, setConfigError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<MeUser | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
   const [authConfig, setAuthConfig] = useState<AuthConfig | null>(null);
+  const [bootstrapped, setBootstrapped] = useState(false);
 
   const getStoredToken = useCallback((): string | null => {
     return localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -45,6 +28,7 @@ export function App() {
   const clearSession = useCallback(() => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     setCurrentUser(null);
+    setAccessToken(null);
   }, []);
 
   const restoreSession = useCallback(
@@ -60,6 +44,7 @@ export function App() {
         }
         return;
       }
+      setAccessToken(token);
       setCurrentUser((await r.json()) as MeUser);
     },
     [clearSession],
@@ -71,8 +56,6 @@ export function App() {
       return;
     }
 
-    const base = apiBase();
-
     void (async () => {
       try {
         const oauthResult = parseOAuthHash();
@@ -80,22 +63,10 @@ export function App() {
           setAuthError(translateApiError(t, oauthResult.authErrorCode));
         }
 
-        const h = await fetch(`${base}/health`);
-        if (!h.ok) {
-          throw new Error(t("errors.healthCheckFailed", { status: h.status }));
-        }
-        setHealth((await h.json()) as Health);
-
         const config = await fetchAuthConfig();
         if (config) {
           setAuthConfig(config);
         }
-
-        const i = await fetch(`${base}/api/items`);
-        if (!i.ok) {
-          throw new Error(t("errors.itemsRequestFailed", { status: i.status }));
-        }
-        setItems((await i.json()) as ItemsResponse);
 
         const tkn = oauthResult.accessToken ?? getStoredToken();
         if (tkn) {
@@ -106,6 +77,8 @@ export function App() {
         }
       } catch (e) {
         setConfigError(e instanceof Error ? e.message : t("errors.requestFailed"));
+      } finally {
+        setBootstrapped(true);
       }
     })();
   }, [getStoredToken, restoreSession, t]);
@@ -116,12 +89,8 @@ export function App() {
     facebook: false,
   };
 
-  const itemsDetailMessage = items?.detail_code
-    ? translateApiError(t, items.detail_code)
-    : null;
-
   return (
-    <Container size="sm" py="xl">
+    <Container size="md" py="xl">
       <Group justify="space-between" align="flex-start" mb="md" wrap="wrap">
         <Title order={1}>{t("app.title")}</Title>
         <Group gap="xs" aria-live="polite">
@@ -157,48 +126,20 @@ export function App() {
         </Alert>
       ) : null}
 
-      {!configError && !currentUser && health ? (
+      {!configError && bootstrapped && !currentUser ? (
         <AuthPanel
           authConfig={methods}
           initialError={authError}
           onSession={(user) => {
             setCurrentUser(user);
+            setAccessToken(getStoredToken());
             setAuthError(null);
           }}
         />
       ) : null}
 
-      {!configError && health ? (
-        <Paper withBorder p="md" radius="md" mb="md">
-          <Title order={3} size="h4" mb="sm">
-            {t("api.title")}
-          </Title>
-          <Text>
-            {t("api.status")} {health.status}
-            <br />
-            {t("api.databaseConfigured")} {String(health.database_configured)}
-          </Text>
-        </Paper>
-      ) : null}
-
-      {!configError && items ? (
-        <Paper withBorder p="md" radius="md">
-          <Title order={3} size="h4" mb="sm">
-            {t("items.title")}
-          </Title>
-          {itemsDetailMessage ? <Text mb="sm">{itemsDetailMessage}</Text> : null}
-          {items.items.length === 0 ? (
-            <Text c="dimmed">{t("items.empty")}</Text>
-          ) : (
-            <List>
-              {items.items.map((it) => (
-                <List.Item key={it.id}>
-                  #{it.id} — {it.name}
-                </List.Item>
-              ))}
-            </List>
-          )}
-        </Paper>
+      {!configError && currentUser && accessToken ? (
+        <Dashboard token={accessToken} />
       ) : null}
     </Container>
   );

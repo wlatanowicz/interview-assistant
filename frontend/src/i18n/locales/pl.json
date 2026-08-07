@@ -5,21 +5,37 @@
     "notSignedIn": "Nie zalogowany",
     "signOut": "Wyloguj"
   },
-  "api": {
-    "title": "API",
-    "status": "Status:",
-    "databaseConfigured": "Baza danych skonfigurowana:"
+  "dashboard": {
+    "title": "Aktywne aplikacje",
+    "empty": "Brak aktywnych aplikacji. Zacznij śledzić pierwszą ofertę."
   },
-  "items": {
-    "title": "Elementy",
-    "empty": "Brak elementów."
+  "applications": {
+    "new": "Nowa aplikacja",
+    "newTitle": "Rozpocznij nową aplikację",
+    "company": "Firma",
+    "position": "Stanowisko",
+    "state": "Status",
+    "startedOn": "Data rozpoczęcia",
+    "adLink": "URL ogłoszenia",
+    "create": "Utwórz",
+    "cancel": "Anuluj",
+    "states": {
+      "interested": "Zainteresowany",
+      "applied": "Wysłano aplikację",
+      "screening": "Screening",
+      "interviewing": "Rozmowy",
+      "assessment": "Zadanie",
+      "offer": "Oferta",
+      "accepted": "Przyjęto",
+      "rejected": "Odrzucono",
+      "withdrawn": "Wycofano",
+      "ghosted": "Brak odpowiedzi"
+    }
   },
   "errors": {
     "configuration": "Błąd konfiguracji",
     "requestFailed": "Żądanie nie powiodło się",
     "apiBaseNotSet": "VITE_API_BASE_URL nie jest ustawiony. Skonfiguruj go do lokalnego rozwoju lub wdrożenia.",
-    "healthCheckFailed": "Sprawdzenie stanu nie powiodło się: {{status}}",
-    "itemsRequestFailed": "Żądanie elementów nie powiodło się: {{status}}",
     "api": {
       "database_not_configured": "Baza danych nie jest skonfigurowana.",
       "auth_not_configured": "Uwierzytelnianie nie jest skonfigurowane.",
@@ -42,6 +58,7 @@
       "oauth_authorization_failed": "Logowanie przez dostawca nie powiodło się. Spróbuj ponownie.",
       "oauth_profile_missing": "Logowanie nie powiodło się. Brak informacji profilu.",
       "oauth_email_not_available": "Logowanie nie powiodło się. Email nie jest dostępny od dostawcy.",
+      "invalid_application_state": "Tego statusu nie można ustawić przy tworzeniu aplikacji.",
       "request_validation_error": "Sprawdź dane wejściowe i spróbuj ponownie."
     }
   },

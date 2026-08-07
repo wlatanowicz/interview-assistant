@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.middleware.sessions import SessionMiddleware
 
-from src.apps.demo.routes import router as demo_router
+from src.apps.applications.routes import router as applications_router
 from src.apps.health.routes import router as health_router
 from src.apps.users import config as users_config
 from src.apps.users.routes import router as auth_router
@@ -17,7 +17,7 @@ from src.utils.api_errors import ApiErrorDetail, CommonApiErrorCode
 app = FastAPI(title="Interview Assistant API", version="0.1.0")
 app.include_router(health_router)
 app.include_router(auth_router)
-app.include_router(demo_router)
+app.include_router(applications_router)
 
 
 @app.exception_handler(RequestValidationError)
