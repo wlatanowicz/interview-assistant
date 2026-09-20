@@ -82,6 +82,18 @@ In: read one application by id, update `company`, `position`, `started_on`,
   `save`, `detailsTitle`, plus `errors.applicationNotFound` wired through
   `translateApiError.ts`'s existing error-code → message map.
 
+## Mobile
+
+Ships alongside the web slice above, on top of the scaffold from task 00:
+
+- `mobile/src/api.ts`: add `getApplication`/`updateApplication`, same shapes as
+  web's `api.ts`.
+- A detail screen (pushed from tapping a row on the Applications list screen
+  from task 00) with the same editable fields; `state` via a native picker/
+  action sheet listing all `APPLICATION_STATES`.
+- Same locale keys as web — task 00 already points the mobile app at the same
+  four JSON files, so no separate translation pass is needed here.
+
 ## Tests
 
 `backend/src/apps/applications/tests/test_routes.py`:

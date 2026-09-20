@@ -97,6 +97,12 @@ same reminder on every run while the event stays inside the lookahead window.
 None. Confirmed intentionally — this task has no user-facing surface beyond the
 email itself; the in-app view is task 09.
 
+## Mobile
+
+None, for the same reason as the web frontend above — this ships an email, not
+a screen. (A push-notification channel would be a genuinely new capability, not
+a parity gap, and is explicitly deferred as a follow-up in task 00.)
+
 ## Tests
 
 `backend/src/apps/applications/tests/test_tasks.py` (or alongside

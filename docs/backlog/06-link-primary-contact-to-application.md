@@ -70,6 +70,14 @@ Depends on task 05 (the `contacts` table must exist first).
 - i18n additions (all four locale files): `applications.primaryContact`,
   `applications.noPrimaryContact`.
 
+## Mobile
+
+- Add the same searchable contact picker to the mobile create screen (task 00)
+  and detail screen (task 01's mobile section), sourced from the mobile
+  Contacts list (task 05's mobile section).
+- Show the linked contact's name as a subtitle on mobile kanban cards (task
+  03's mobile section) and on the Applications list row.
+
 ## Tests
 
 - Create/update an application with a valid own contact id → succeeds, returned

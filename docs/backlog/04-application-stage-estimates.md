@@ -74,6 +74,15 @@ Migration (new Alembic revision, chained after `b7e4a1c9023f`):
 - i18n additions (all four locale files): `applications.estimatedStageCount`,
   `applications.estimatedStages`, `applications.estimatedDeadline`.
 
+## Mobile
+
+- `mobile/src/types.ts`: same three optional fields.
+- Add the equivalent inputs (numeric input, a chip/tag input for
+  `estimated_stages`, a native date picker for `estimated_deadline_on`) to the
+  mobile create screen (task 00) and detail screen (task 01's mobile section).
+- Mobile kanban cards (task 03's mobile section): same "3 rounds" / deadline
+  badge treatment as web.
+
 ## Tests
 
 - Create/update with all three fields round-trips correctly.

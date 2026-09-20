@@ -31,6 +31,17 @@ Become the operating system for job seekers.
 Technical domain design: [Core domain model](domain-model.md) (`JobApplication`,
 `ApplicationEvent`, `Contact`).
 
+## Platforms
+
+-   Web (React) — existing, primary surface today.
+-   Native iOS/Android apps (React Native + Expo), against the same backend API.
+
+Decision (2026-09-17): mobile development starts immediately, and from now on
+every feature built for web ships on mobile at the same time — not staggered,
+not a reduced subset. See [`backlog/00-mobile-app-bootstrap.md`](backlog/00-mobile-app-bootstrap.md)
+for the scaffold this depends on and [`backlog/README.md`](backlog/README.md)
+for how this changes every other ticket.
+
 ## Killer Features
 
 -   Email parsing

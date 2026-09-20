@@ -17,3 +17,4 @@ mozliwość przekierowywania maili od rekruterów w celu automatycznego przypisa
 kalendarz
 
 
+Build iOS and Android apps in React Native + Expo. Mobile apps and web interface should use the same backend API.

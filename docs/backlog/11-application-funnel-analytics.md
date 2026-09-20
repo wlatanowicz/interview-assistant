@@ -83,6 +83,17 @@ precisely what it counts.
   `responseRate`, `interviewRate`, `offerRate`, `stateBreakdown`, `noData` (shown
   when `total_applications === 0`).
 
+## Mobile
+
+Fills in the "Analytics" tab placeholder left by task 00's navigation shell:
+
+- `mobile/src/api.ts`: `getApplicationStats`.
+- Stat cards for `response_rate`/`interview_rate`/`offer_rate` and a simple
+  bar-style breakdown of `state_counts` (plain views/progress bars, same
+  no-new-dependency approach as web — no charting library for a handful of
+  bars).
+- Same locale keys as web (shared per task 00).
+
 ## Tests
 
 - Zero applications → all rates `0.0`, no error.

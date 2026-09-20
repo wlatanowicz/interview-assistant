@@ -51,6 +51,14 @@ occurred_at >= now()` — is already covered by the partial index created in tas
 - i18n additions (all four locale files): `dashboard.upcomingTitle`,
   `dashboard.upcomingEmpty`.
 
+## Mobile
+
+- `mobile/src/api.ts`: `listUpcomingEvents`.
+- A widget at the top of the mobile Applications screen (task 00), same
+  fields, tapping a row navigates to the task 01 mobile detail screen for that
+  application. Fetched separately from the applications list, same
+  non-blocking loading behavior as web.
+
 ## Tests
 
 - Returns only `scheduled` events with `occurred_at` in the future, excludes

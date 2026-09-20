@@ -69,6 +69,14 @@ Migration:
 - i18n additions (all four locale files): `events.participants`,
   `events.noParticipants`.
 
+## Mobile
+
+- Add a multi-select participants control to the mobile event form screen
+  (task 07's mobile section), sourced from the mobile Contacts list (task 05's
+  mobile section); same two-call save sequence (create/update event, then
+  `PUT /events/{id}/contacts`).
+- Show participant name chips on the mobile timeline rows.
+
 ## Tests
 
 - `PUT` participants with a mix of valid own-contact ids → event now reports

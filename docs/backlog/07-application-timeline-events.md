@@ -129,6 +129,18 @@ the router prefix as below):
   `events.outcomes.*` for every value listed above, and
   `errors.eventNotFound`.
 
+## Mobile
+
+- `mobile/src/api.ts`: `listEvents`, `createEvent`, `updateEvent`,
+  `deleteEvent`.
+- A timeline section on the mobile detail screen (task 01), same
+  chronological list; "Add event" pushes an event form screen (type picker,
+  native date/time picker, outcome picker, title, notes, duration) rather than
+  a modal.
+- Same `suggested_state` inline banner treatment as web, wired to the mobile
+  `updateApplication` call from task 01's mobile section.
+- Same locale keys as web (shared per task 00).
+
 ## Tests
 
 - Create/list/get/update/delete happy paths, scoped per application and per user.

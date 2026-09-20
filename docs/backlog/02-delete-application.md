@@ -49,6 +49,13 @@ task 07 rather than retrofitting it later.
 - i18n additions (all four locale files): `applications.delete`,
   `applications.deleteConfirmTitle`, `applications.deleteConfirmBody`.
 
+## Mobile
+
+- `mobile/src/api.ts`: add `deleteApplication`.
+- Delete action on the detail screen from task 01's mobile section (button or
+  swipe-to-delete on the Applications list row), confirmed via `Alert.alert`
+  (native equivalent of Mantine's confirm modal) rather than a custom dialog.
+
 ## Tests
 
 - `DELETE` own application → 204, subsequent `GET` on it → 404.

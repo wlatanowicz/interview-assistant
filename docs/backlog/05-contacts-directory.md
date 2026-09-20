@@ -84,6 +84,17 @@ suggestion once the surface grows beyond a couple of fields):
   `notes`, `save`, `cancel`, `delete`, `deleteConfirmTitle`, `empty`, plus
   `errors.contactNotFound`.
 
+## Mobile
+
+Fills in the "Contacts" tab placeholder left by task 00's navigation shell:
+
+- `mobile/src/contacts/` mirroring the web module: `types.ts`, `api.ts`, a list
+  screen, and a create/edit form screen (push navigation rather than a modal,
+  matching how task 01's mobile detail screen is structured).
+- Same field set and validation as web (`name` required, `emails`/`phones` as
+  chip inputs, `company`, `job_title`, `notes`).
+- Same locale keys as web (already shared per task 00).
+
 ## Tests
 
 - Create/list/get/update/delete happy paths, scoped-per-user isolation (mirror

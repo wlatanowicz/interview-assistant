@@ -8,6 +8,12 @@ only: no edit, no delete, no kanban, no contacts, no timeline).
 Files are numbered in execution order. Each is a single deliverable: model/migration
 + API + UI + tests, no file leaves half of a feature for a later ticket.
 
+**Platform decision (2026-09-17):** mobile (React Native + Expo) starts
+immediately, and every feature built for web from now on ships on mobile at
+the same time — see `00` below and `discovery_summary.md`'s new "Platforms"
+section. Tasks `01`–`12` each carry a `## Mobile` section alongside their
+`## Frontend` section for this reason.
+
 ## What's covered
 
 Each ticket file carries a `status` frontmatter field (`todo` or `done`) —
@@ -15,6 +21,7 @@ check there for the current source of truth; the table below is a snapshot.
 
 | # | Task | MVP pillar | Status |
 |---|------|------------|--------|
+| 00 | Mobile app bootstrap (React Native + Expo) | Platform foundation | todo |
 | 01 | Application detail view & edit | Application tracker | todo |
 | 02 | Delete an application | Application tracker | todo |
 | 03 | Kanban pipeline board | Kanban pipeline | todo |
@@ -63,11 +70,14 @@ derives from `discovery_summary.md`, not from `IDEAS.md` directly. Checking each
 | Detect ghosting (long silence) | **Gap** — see below |
 | Forward recruiter emails for automatic assignment to a recruitment | Out of scope, listed above |
 | Calendar | **Gap** — see below |
+| Native iOS/Android apps (React Native + Expo) sharing the existing backend API | Decided (2026-09-17) — see task `00` and the "Mobile" section on every ticket below |
 
 Three ideas were never carried forward into `discovery_summary.md`'s MVP/Killer/
 Future lists, so they also never got a backlog ticket. That's a product-scope
 decision, not something this backlog should decide unilaterally — flagging here
-rather than ticketing:
+rather than ticketing. (The fourth, mobile apps, got the same "not this backlog's
+call" flag in the previous review — the user has since made that call explicitly,
+so it's ticketed as `00` instead of listed here.)
 
 - **Ghosting detection.** The domain model has a `ghosted` `ApplicationState`
   (`domain-model.md`), but it's a manual selection today — nothing flags a
@@ -103,3 +113,12 @@ If any of these should be in scope, they belong in `discovery_summary.md` first
 - Tests: backend integration tests against a real Postgres via the existing
   `auth_client` fixture (see `apps/applications/tests/test_routes.py`); no new
   frontend test framework introduced unless a task says so.
+- Mobile: `mobile/` (Expo, React Native, TypeScript), scaffolded in task `00`.
+  Every ticket from `01` onward ships its web slice and mobile slice together —
+  a ticket isn't done with only one platform built. Mobile screens reuse the
+  same backend endpoints and the same four locale JSON files as web; no
+  separate translation pass. Interaction patterns translate rather than
+  copy 1:1 (Mantine `Modal`/`Drawer` → a pushed screen, `modals.openConfirmModal`
+  → `Alert.alert`, HTML5 drag-and-drop → the same menu/action-sheet-based move
+  already speced for web in task 03) — each ticket's `## Mobile` section says
+  what that translation is for that feature.

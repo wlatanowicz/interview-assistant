@@ -81,6 +81,14 @@ initiative if this lands well.
   `events.generatingPrepNotes`, `events.prepNotesOverwriteConfirm`, plus
   `errors.aiProviderNotConfigured`, `errors.aiProviderError`.
 
+## Mobile
+
+- `mobile/src/api.ts`: `generatePrepNotes`.
+- Same "Generate prep notes ✨" action on the mobile event form screen (task
+  07's mobile section), same eligibility rule (interview-shaped, scheduled/
+  future events only), same overwrite confirmation via `Alert.alert` before
+  replacing existing notes, same loading/error handling as web.
+
 ## Tests
 
 - With `ANTHROPIC_API_KEY` unset, the endpoint returns 503
