@@ -4,6 +4,26 @@ status: todo
 
 # 01 — Application detail view & edit
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Dodanie możliwości otwarcia jednej aplikacji rekrutacyjnej,
+zobaczenia wszystkich jej pól i ich edycji — w tym zmiany stanu (`state`) w
+pipeline. Dziś API obsługuje tylko tworzenie i listowanie; nic nie da się
+zmienić po utworzeniu.
+
+**Dlaczego:** MVP „trackera aplikacji” jest bezużyteczny, jeśli literówka albo
+zmiana statusu wymaga usunięcia i ponownego utworzenia wiersza. To także
+fundament, na którym każde kolejne zadanie (przeciąganie na kanbanie, kontakty,
+oś czasu) buduje swoją funkcję edycji, dlatego jest pierwsze.
+
+**Zakres:** W zakresie: odczyt jednej aplikacji po id, edycja `company`,
+`position`, `started_on`, `ad_link`, `state` (dowolny stan, nie tylko
+nieterminalny jak przy tworzeniu). Poza zakresem: usuwanie (zadanie 02), pola
+szacowanych etapów (zadanie 04), kontakty/oś czasu (kolejne zadania).
+
 ## Summary
 
 Add a way to open one job application, see all of its fields, and edit them —

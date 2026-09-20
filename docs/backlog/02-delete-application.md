@@ -4,6 +4,24 @@ status: todo
 
 # 02 — Delete an application
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Umożliwienie użytkownikowi trwałego usunięcia aplikacji
+rekrutacyjnej dodanej przez pomyłkę (duplikat, zła firma, wpis testowy). To
+twarde usunięcie, różne od oznaczenia aplikacji jako `withdrawn` (co zachowuje
+historię i odbywa się przez edycję stanu z zadania 01).
+
+**Dlaczego:** Bez tego pomyłki gromadzą się w trackerze bez możliwości poprawy.
+Zadanie małe i samodzielne, potrzebne zanim board z zadania 03 zacznie zbierać
+realne dane użytkowe.
+
+**Zakres:** W zakresie: endpoint `DELETE`, interfejs potwierdzenia. Poza
+zakresem: usuwanie masowe, miękkie usuwanie/cofnięcie (nie wymagane przez
+dokument discovery; dodać tylko jeśli zapotrzebuje na to kolejne zadanie).
+
 ## Summary
 
 Let a user permanently remove a job application they added by mistake (duplicate,

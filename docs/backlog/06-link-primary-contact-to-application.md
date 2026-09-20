@@ -4,6 +4,20 @@ status: todo
 
 # 06 — Link a primary contact to an application
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Dodanie `JobApplication.primary_contact_id`, umożliwiające
+wybór, który `Contact` (z zadania 05) jest głównym rekruterem/osobą kontaktową
+dla danej roli, oraz pokazanie tego powiązania na karcie i w panelu szczegółów.
+
+**Dlaczego:** Model domenowy jawnie definiuje ten klucz obcy
+(`JobApplication.primary_contact_id`, „domyślny rekruter / właściciel HR dla
+danej roli”). To najtańszy sposób połączenia dwóch encji przed większą pracą
+nad uczestnikami wydarzeń w zadaniu 08.
+
 ## Summary
 
 Add `JobApplication.primary_contact_id`, letting a user pick which `Contact` (from

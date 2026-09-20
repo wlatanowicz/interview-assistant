@@ -4,6 +4,21 @@ status: todo
 
 # 08 — Event participants
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Dodanie tabeli łączącej `ApplicationEventContact`, aby
+wydarzenie mogło wskazywać, którzy kontakty brały w nim udział (np. rozmowa
+panelowa z dwoma osobami przeprowadzającymi wywiad), oraz umożliwienie
+interfejsowi osi czasu pokazywania/edycji tej listy.
+
+**Dlaczego:** Model domenowy wskazuje to jako odrębną relację wiele-do-wielu,
+inną niż `primary_contact_id`. Wydzielone jako osobne zadanie po zadaniu 07,
+aby CRUD osi czasu powstał najpierw, bez mieszania go z edytorem tabeli
+łączącej.
+
 ## Summary
 
 Add the `ApplicationEventContact` junction table so an event can list which

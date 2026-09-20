@@ -4,6 +4,37 @@ status: todo
 
 # 00 — Mobile app bootstrap (React Native + Expo)
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Uruchomienie nowej aplikacji Expo (React Native, TypeScript),
+która korzysta z tego samego backendowego API co frontend webowy, wraz z
+działającym logowaniem i szkieletem nawigacji odzwierciedlającym sekcje
+aplikacji webowej. To fundament, na którym opiera się sekcja „Mobile” każdego
+kolejnego zadania — nic innego nie trafi na mobile, zanim to nie powstanie.
+
+**Dlaczego:** Decyzja produktowa (2026-09-17, patrz `discovery_summary.md`):
+prace nad aplikacją mobilną zaczynają się jak najszybciej, a każda funkcja
+budowana od teraz na web trafia jednocześnie na mobile. Ten wymóg równoległości
+nie ma sensu bez aplikacji, do której można dodawać funkcje, dlatego to zadanie
+wstawiono na początek kolejności realizacji (`00`, przed `01`), mimo że samo w
+sobie nie dostarcza żadnej nowej funkcji produktowej.
+
+**Zakres:** W zakresie: szkielet aplikacji Expo, wspólny klient API rozmawiający
+z istniejącym backendem FastAPI, logowanie/rejestracja e-mail+hasło oraz
+e-mail+kod (przepływy, które dziś są zwykłym JSON-em), bezpieczne przechowywanie
+tokenu, szkielet nawigacji z dolnymi zakładkami (ekrany placeholder/rzeczywiste
+dla każdej istniejącej sekcji webowej), i18n podpięte pod te same teksty co web,
+oraz ekran aplikacji rekrutacyjnych z listą i tworzeniem, odpowiadający temu, co
+faktycznie jest już na webie. Poza zakresem (jawne zadania następcze, nie
+obiecane po cichu): logowanie przez Google/Facebook (OAuth) — obecny przepływ
+przekierowuje przeglądarkę w sposób działający tylko w przeglądarce, więc
+wymaga osobnej decyzji o deep-linku; powiadomienia push; wsparcie offline;
+podpisywanie i publikacja w sklepach; oraz każda funkcja wykraczająca poza to,
+co już jest na webie (te trafiają do sekcji „Mobile” właściwych zadań 01–12).
+
 ## Summary
 
 Stand up a new Expo (React Native, TypeScript) app that talks to the *same*

@@ -4,6 +4,22 @@ status: todo
 
 # 04 — Stage estimate & deadline fields
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Dodanie trzech pól „szybkich faktów” zaprojektowanych już w
+modelu domenowym, ale pominiętych w pierwszej iteracji implementacji:
+`estimated_stage_count`, `estimated_stages` (uporządkowane etykiety) i
+`estimated_deadline_on`. Pokazanie ich przy tworzeniu/edycji oraz jako małe
+odznaki na karcie kanban.
+
+**Dlaczego:** Model domenowy (`domain-model.md`) definiuje te pola jako
+„prawie-MVP” (szybki wskaźnik „~3 rundy”), pomagający kandydatowi ocenić, na
+jakim etapie jest, bez otwierania osi czasu. To czysta metadana — żadnej nowej
+encji — więc to mały, samodzielny wycinek.
+
 ## Summary
 
 Add the three "quick facts" fields the domain model already designs for but that

@@ -4,6 +4,33 @@ status: todo
 
 # 12 — AI interview prep notes
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Dla danego nadchodzącego wydarzenia typu rozmowa
+kwalifikacyjna, wygenerowanie krótkiej listy przygotowawczej (prawdopodobne
+tematy, mądre pytania do zadania, kątów specyficznych dla firmy) przez
+wywołanie LLM, i umożliwienie użytkownikowi zapisania wyniku w notatkach tego
+wydarzenia.
+
+**Dlaczego:** „Przygotowanie do rozmowy z AI” jest wymienione jako killer
+feature w dokumencie discovery. Zaplanowane na koniec, ponieważ — inaczej niż
+każde wcześniejsze zadanie — wymaga zupełnie nowej zdolności, której w kodzie
+jeszcze nie ma: integracji z zewnętrznym dostawcą LLM — więc niesie więcej
+ryzyka wdrożeniowego (nowa zależność, nowy sekret, nowa powierzchnia kosztowa)
+niż zadania w stylu CRUD wcześniej. Potwierdzić budżet/wybór dostawcy przed
+rozpoczęciem.
+
+**Zakres:** W zakresie: jeden endpoint, który przyjmuje wydarzenie wraz z
+kontekstem jego aplikacji i zwraca wygenerowany tekst; akcja „Wygeneruj notatki
+przygotowawcze” w formularzu wydarzenia, wypełniająca pole notatek (użytkownik
+nadal jawnie zapisuje — nigdy automatyczny zapis bez przeglądu). Poza zakresem:
+rozmowa w stylu czatu, odpowiedzi strumieniowe, wieloetapowy coaching rozmów
+kwalifikacyjnych — wszystko to zbyt duże jak na „killer feature #5 na liście
+MVP”; wrócić do tego jako osobna inicjatywa, jeśli to się sprawdzi.
+
 ## Summary
 
 For a given upcoming interview-type event, generate a short prep checklist (likely

@@ -4,6 +4,28 @@ status: todo
 
 # 03 — Kanban pipeline board
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Zastąpienie płaskiej tabeli na dashboardzie boardem kanban:
+jedna kolumna na każdy nieterminalny `ApplicationState`, karty dla każdej
+aplikacji, przeciąganie (lub dostępne menu jako alternatywa) do przenoszenia
+karty między kolumnami. Aplikacje w stanie terminalnym (`accepted`, `rejected`,
+`withdrawn`, `ghosted`) są zwijane w sekcję „Zamknięte” pod boardem, zamiast
+zajmować miejsce w kolumnach.
+
+**Dlaczego:** „Kanban pipeline” to osobna pozycja na liście MVP, odrębna od
+tabeli trackera — to podstawowy sposób, w jaki użytkownik ma widzieć na
+pierwszy rzut oka, na jakim etapie jest każda aktywna aplikacja.
+
+**Zakres:** W zakresie: układ boardu, zmiana stanu przez przeciąganie lub menu,
+sekcja zamkniętych aplikacji. Poza zakresem: ręczne sortowanie w obrębie
+kolumny (nie istnieje i nie jest potrzebne pole sortowania — kolejność wg
+`updated_at desc`, tak jak w obecnym endpoincie listy), swimlane, zapisane
+filtry.
+
 ## Summary
 
 Replace the flat table on the dashboard with a kanban board: one column per

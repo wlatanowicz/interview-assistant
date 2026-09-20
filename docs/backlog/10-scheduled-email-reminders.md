@@ -4,6 +4,29 @@ status: todo
 
 # 10 — Scheduled email reminders
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Wysyłanie przypomnienia e-mail przed każdym nadchodzącym,
+zaplanowanym `ApplicationEvent` (rozmową, telefonem, terminem), z użyciem
+istniejącego stosu schedulera i powiadomień, zamiast polegać na tym, że
+użytkownik sam sprawdzi widżet z zadania 09.
+
+**Dlaczego:** Druga połowa MVP „systemu przypomnień”, jawnie wymieniona w
+dokumencie discovery jako killer feature („przypomnienia follow-up”).
+Repozytorium ma już runner zadań cron/interwałowych (`src/scheduler`) i
+pipeline szablonowych e-maili (`src/apps/notifications`) zbudowany dla
+przepływów autoryzacji — to zadanie podłącza wydarzenia aplikacji do tej
+istniejącej infrastruktury, zamiast budować cokolwiek nowego.
+
+**Zakres:** W zakresie: jeden e-mail z przypomnieniem na zaplanowane
+wydarzenie, wysłany w ustalonym oknie czasowym przed `occurred_at`, bez
+duplikatów. Poza zakresem: konfigurowalny per użytkownika czas wyprzedzenia lub
+preferencje rezygnacji, kanały SMS/push — żadne z tych nie jest na liście MVP;
+dodać osobne zadanie, jeśli pojawi się taka potrzeba.
+
 ## Summary
 
 Send an email reminder ahead of each upcoming scheduled `ApplicationEvent`

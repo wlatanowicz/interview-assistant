@@ -4,6 +4,22 @@ status: todo
 
 # 05 — Contacts directory
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Wprowadzenie encji `Contact` z modelu domenowego: przypisanej
+do użytkownika książki kontaktów rekruterów, hiring managerów i innych osób
+poznanych podczas szukania pracy. Dostarczone jako samodzielna funkcja CRUD
+(lista, tworzenie, edycja, usuwanie) z własną zakładką — jeszcze niepowiązana z
+aplikacjami ani wydarzeniami (to zadania 06 i 08).
+
+**Dlaczego:** „Kontakty firmowe i rekruterów” to samodzielny filar MVP.
+Zbudowanie tego najpierw jako samodzielnej funkcji (zamiast doczepienia do
+formularza aplikacji) utrzymuje to zadanie w małym rozmiarze i daje zadaniu 06
+gotowy selektor do podłączenia.
+
 ## Summary
 
 Introduce the `Contact` entity from the domain model: a user-scoped rolodex of

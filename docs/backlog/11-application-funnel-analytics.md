@@ -4,6 +4,21 @@ status: todo
 
 # 11 — Application funnel analytics
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Mały widok statystyk: wskaźnik odpowiedzi, wskaźnik rozmów
+rekrutacyjnych i wskaźnik ofert dla aplikacji użytkownika, plus prosty rozkład
+stanów, wyliczane na podstawie istniejących danych
+`JobApplication`/`ApplicationEvent`.
+
+**Dlaczego:** „Analityka (wskaźniki odpowiedzi, rozmów, ofert)” jest wymieniona
+w dokumencie discovery jako killer feature. Jest tania do wdrożenia, gdy
+istnieją już dane źródłowe (zadania 01–07) — to czysty odczyt/agregacja na
+tym, co już jest zapisane, bez nowej encji.
+
 ## Summary
 
 A small stats view: response rate, interview rate, and offer rate across the

@@ -4,6 +4,24 @@ status: todo
 
 # 07 — Application timeline (events)
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Implementacja `ApplicationEvent` z modelu domenowego:
+append-only oś czasu punktów kontaktu (rozmowy, spotkania rekrutacyjne,
+zadania domowe, notatki — przeszłe lub zaplanowane) przypisanych do jednej
+aplikacji. Dostarczenie pełnego CRUD wraz z sekcją osi czasu w panelu
+szczegółów.
+
+**Dlaczego:** „Notatki z rozmów” to filar MVP, a dokument discovery traktuje oś
+czasu jako źródło prawdy („stan odpowiada na pytanie »na jakim jestem etapie«,
+wydarzenia odpowiadają na »co się wydarzyło«”). Kontakty (zadania 05/06)
+istnieją wcześniej, aby wydarzenie mogło opcjonalnie wskazać, kto brał udział —
+pełne powiązanie uczestników to zadanie 08, celowo wydzielone, by ograniczyć
+rozmiar tego zadania.
+
 ## Summary
 
 Implement `ApplicationEvent` from the domain model: the append-only timeline of

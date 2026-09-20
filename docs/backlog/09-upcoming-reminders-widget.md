@@ -4,6 +4,21 @@ status: todo
 
 # 09 — Upcoming reminders widget
 
+## Podsumowanie (PL)
+
+*Wersja angielska jest wiążąca do budowy aplikacji; ta sekcja istnieje wyłącznie
+dla wygody utrzymania backlogu.*
+
+**Streszczenie:** Dodanie widżetu na dashboardzie listującego każde
+zaplanowane, przyszłe `ApplicationEvent` we wszystkich aplikacjach użytkownika
+(„co nadchodzi”), posortowane od najbliższego, z linkiem bezpośrednio do danej
+aplikacji.
+
+**Dlaczego:** Pierwsza połowa MVP „systemu przypomnień” — widok w aplikacji
+tego, co przed nami — celowo oddzielona od przypomnień e-mailowych z zadania
+10, aby to mogło trafić do produkcji od razu, gdy tylko istnieje oś czasu
+(zadanie 07), bez czekania na integrację z powiadomieniami/schedulerem.
+
 ## Summary
 
 Add a dashboard widget listing every scheduled, future `ApplicationEvent` across
