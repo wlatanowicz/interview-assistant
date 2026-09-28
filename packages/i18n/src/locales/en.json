@@ -5,37 +5,21 @@
     "notSignedIn": "Not signed in",
     "signOut": "Sign out"
   },
-  "dashboard": {
-    "title": "Active applications",
-    "empty": "No active applications yet. Start tracking your first role."
+  "api": {
+    "title": "API",
+    "status": "Status:",
+    "databaseConfigured": "Database configured:"
   },
-  "applications": {
-    "new": "New application",
-    "newTitle": "Start new application",
-    "company": "Company",
-    "position": "Position",
-    "state": "Status",
-    "startedOn": "Started on",
-    "adLink": "Job posting URL",
-    "create": "Create",
-    "cancel": "Cancel",
-    "states": {
-      "interested": "Interested",
-      "applied": "Applied",
-      "screening": "Screening",
-      "interviewing": "Interviewing",
-      "assessment": "Assessment",
-      "offer": "Offer",
-      "accepted": "Accepted",
-      "rejected": "Rejected",
-      "withdrawn": "Withdrawn",
-      "ghosted": "Ghosted"
-    }
+  "items": {
+    "title": "Items",
+    "empty": "No items yet."
   },
   "errors": {
     "configuration": "Configuration error",
     "requestFailed": "Request failed",
     "apiBaseNotSet": "VITE_API_BASE_URL is not set. Configure it for local dev or deploy.",
+    "healthCheckFailed": "Health check failed: {{status}}",
+    "itemsRequestFailed": "Items request failed: {{status}}",
     "api": {
       "database_not_configured": "The database is not configured.",
       "auth_not_configured": "Authentication is not configured.",
@@ -58,8 +42,8 @@
       "oauth_authorization_failed": "Sign-in with the provider failed. Please try again.",
       "oauth_profile_missing": "Sign-in could not be completed. Profile information is missing.",
       "oauth_email_not_available": "Sign-in could not be completed. Email is not available from the provider.",
-      "invalid_application_state": "That application status cannot be used when starting a new application.",
-      "request_validation_error": "Please check your input and try again."
+      "request_validation_error": "Please check your input and try again.",
+      "invalid_application_state": "That application status cannot be used when starting a new application."
     }
   },
   "auth": {
@@ -108,5 +92,32 @@
     "pl": "Polish",
     "uk": "Ukrainian",
     "de": "German"
+  },
+  "dashboard": {
+    "title": "Active applications",
+    "empty": "No active applications yet. Start tracking your first role."
+  },
+  "applications": {
+    "new": "New application",
+    "newTitle": "Start new application",
+    "company": "Company",
+    "position": "Position",
+    "state": "Status",
+    "startedOn": "Started on",
+    "adLink": "Job posting URL",
+    "create": "Create",
+    "cancel": "Cancel",
+    "states": {
+      "interested": "Interested",
+      "applied": "Applied",
+      "screening": "Screening",
+      "interviewing": "Interviewing",
+      "assessment": "Assessment",
+      "offer": "Offer",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "withdrawn": "Withdrawn",
+      "ghosted": "Ghosted"
+    }
   }
 }

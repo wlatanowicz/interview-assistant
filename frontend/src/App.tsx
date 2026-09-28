@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Dashboard } from "./applications/Dashboard";
 import { AuthPanel } from "./auth/AuthPanel";
-import { apiBase, fetchAuthConfig, loadMe, parseOAuthHash } from "./auth/api";
+import { fetchAuthConfig, loadMe, parseOAuthHash } from "./auth/api";
 import type { AuthConfig, MeUser } from "./auth/types";
 import { LanguageSelector } from "./i18n/LanguageSelector";
 import { translateApiError } from "./i18n/translateApiError";
@@ -33,10 +33,6 @@ export function App() {
 
   const restoreSession = useCallback(
     async (token: string) => {
-      const base = apiBase();
-      if (!base) {
-        return;
-      }
       const r = await loadMe(token);
       if (!r.ok) {
         if (r.status === 401 || r.status === 403) {
@@ -45,7 +41,7 @@ export function App() {
         return;
       }
       setAccessToken(token);
-      setCurrentUser((await r.json()) as MeUser);
+      setCurrentUser(r.data);
     },
     [clearSession],
   );
@@ -130,9 +126,9 @@ export function App() {
         <AuthPanel
           authConfig={methods}
           initialError={authError}
-          onSession={(user) => {
+          onSession={(user, token) => {
             setCurrentUser(user);
-            setAccessToken(getStoredToken());
+            setAccessToken(token);
             setAuthError(null);
           }}
         />

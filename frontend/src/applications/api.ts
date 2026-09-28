@@ -1,4 +1,4 @@
-import { resolveApiError } from "../auth/api";
+import { resolveApiError } from "@micro-saas/api-client";
 import type {
   JobApplication,
   JobApplicationCreatePayload,

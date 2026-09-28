@@ -5,37 +5,21 @@
     "notSignedIn": "Не ввійшли",
     "signOut": "Вийти"
   },
-  "dashboard": {
-    "title": "Активні заявки",
-    "empty": "Ще немає активних заявок. Почніть відстежувати першу вакансію."
+  "api": {
+    "title": "API",
+    "status": "Статус:",
+    "databaseConfigured": "База даних налаштована:"
   },
-  "applications": {
-    "new": "Нова заявка",
-    "newTitle": "Почати нову заявку",
-    "company": "Компанія",
-    "position": "Посада",
-    "state": "Статус",
-    "startedOn": "Дата початку",
-    "adLink": "URL вакансії",
-    "create": "Створити",
-    "cancel": "Скасувати",
-    "states": {
-      "interested": "Цікавить",
-      "applied": "Подано заявку",
-      "screening": "Скринінг",
-      "interviewing": "Співбесіди",
-      "assessment": "Тестове",
-      "offer": "Офер",
-      "accepted": "Прийнято",
-      "rejected": "Відмова",
-      "withdrawn": "Відкликано",
-      "ghosted": "Без відповіді"
-    }
+  "items": {
+    "title": "Елементи",
+    "empty": "Ще немає елементів."
   },
   "errors": {
     "configuration": "Помилка конфігурації",
     "requestFailed": "Запит не виконано",
     "apiBaseNotSet": "VITE_API_BASE_URL не налаштовано. Налаштуйте для локальної розробки або розгортання.",
+    "healthCheckFailed": "Перевірка стану не виконана: {{status}}",
+    "itemsRequestFailed": "Запит елементів не виконано: {{status}}",
     "api": {
       "database_not_configured": "База даних не налаштована.",
       "auth_not_configured": "Автентифікація не налаштована.",
@@ -58,8 +42,8 @@
       "oauth_authorization_failed": "Вхід через провайдера не виконано. Спробуйте ще раз.",
       "oauth_profile_missing": "Вхід не виконано. Немає інформації профілю.",
       "oauth_email_not_available": "Вхід не виконано. Email недоступний від провайдера.",
-      "invalid_application_state": "Цей статус не можна встановити під час створення заявки.",
-      "request_validation_error": "Перевірте введені дані та спробуйте ще раз."
+      "request_validation_error": "Перевірте введені дані та спробуйте ще раз.",
+      "invalid_application_state": "Цей статус не можна встановити під час створення заявки."
     }
   },
   "auth": {
@@ -108,5 +92,32 @@
     "pl": "Польська",
     "uk": "Українська",
     "de": "Німецька"
+  },
+  "dashboard": {
+    "title": "Активні заявки",
+    "empty": "Ще немає активних заявок. Почніть відстежувати першу вакансію."
+  },
+  "applications": {
+    "new": "Нова заявка",
+    "newTitle": "Почати нову заявку",
+    "company": "Компанія",
+    "position": "Посада",
+    "state": "Статус",
+    "startedOn": "Дата початку",
+    "adLink": "URL вакансії",
+    "create": "Створити",
+    "cancel": "Скасувати",
+    "states": {
+      "interested": "Цікавить",
+      "applied": "Подано заявку",
+      "screening": "Скринінг",
+      "interviewing": "Співбесіди",
+      "assessment": "Тестове",
+      "offer": "Офер",
+      "accepted": "Прийнято",
+      "rejected": "Відмова",
+      "withdrawn": "Відкликано",
+      "ghosted": "Без відповіді"
+    }
   }
 }
