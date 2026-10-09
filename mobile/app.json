@@ -8,9 +8,11 @@
         "icon": "./assets/icon.png",
         "userInterfaceStyle": "automatic",
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "com.latanowicz.interviewassistant.app"
         },
         "android": {
+            "package": "com.latanowicz.interviewassistant.app",
             "usesCleartextTraffic": true,
             "adaptiveIcon": {
                 "backgroundColor": "#E6F4FE",
